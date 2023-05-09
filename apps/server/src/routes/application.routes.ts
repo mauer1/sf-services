@@ -1,8 +1,12 @@
-import {Router} from 'express';
+import { Router } from 'express';
 import * as sfdcController from '../controllers/sfdc.controller';
 
-const applicationRoutes: Router  = Router();
+const applicationRoutes: Router = Router();
 
-applicationRoutes.post('/login', sfdcController.login);
+applicationRoutes.get(
+  '/query',
+  sfdcController.getSfConnection,
+  sfdcController.query
+);
 
 export default applicationRoutes;
