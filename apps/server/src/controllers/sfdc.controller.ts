@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 
 export const query = async (req: Request, res: Response) => {
-  const conn = req['sfConnection'];
+  const conn = req['sfdcConnection'];
   if (conn) {
     conn.query('SELECT ID, Name from Account', function (err, results) {
       if (err) {

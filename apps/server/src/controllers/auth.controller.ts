@@ -48,7 +48,7 @@ export const getSfAuth = async (
     authResponse.organizationId = conn.organizationId;
     authResponse.conn = connection;
     req['auth'] = authResponse;
-    console.debug('[auth.controller][getSfAuth][set authResponse');
+    console.debug('[auth.controller][getSfAuth][set authResponse]');
     next();
   } catch (ex) {
     console.error(ex);
