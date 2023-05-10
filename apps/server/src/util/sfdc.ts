@@ -1,14 +1,30 @@
 import * as jsforce from 'jsforce';
 import { SF_API_VERSION } from '../constants';
-import { ConnectionOptions } from '../models/models';
+import { ConnectionOptions, SalesforceConnection } from '../models/models';
 
-export const initConnection = (connectionOptions: ConnectionOptions) => {
-  const options = { ...connectionOptions, version: SF_API_VERSION };
-  options.oauth2 = {
-    clientId: options.clientId,
-    clientSecret: options.clientSecret,
-    loginUrl: options.loginUrl,
-    redirectUri: options.redirectUri,
+export const getOAuth2 = (loginUrl?: string) => {
+  return new jsforce.OAuth2({
+    loginUrl: loginUrl || 'https://login.salesforce.com',
+    clientId: process.env.clientId,
+    clientSecret: process.env.clientSecret,
+    redirectUri: process.env.redirectUri,
+  });
+};
+
+export const initConnection = (
+  authInfo: Partial<SalesforceConnection>,
+  version = SF_API_VERSION.version
+) => {
+  if (!version) {
+    version = SF_API_VERSION.version;
+  }
+  const connData: ConnectionOptions = {
+    oauth2: getOAuth2(authInfo.loginUrl),
+    instanceUrl: authInfo.instanceUrl,
+    accessToken: authInfo.accessToken,
+    refreshToken: authInfo.refreshToken,
+    maxRequest: 5,
+    version,
   };
-  return new jsforce.Connection(options);
+  return new jsforce.Connection(connData);
 };
